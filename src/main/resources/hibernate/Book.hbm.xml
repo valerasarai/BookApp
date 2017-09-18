@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!-- - - - - - - - - - - - - - - - - - - - - - -
+Model de hibernate mapping pentru exemplu 2
+Varianta clasei fara field-ul ID, car cu un cimp ID in DB
+ - - - - - - - - - - - - - - - - - - - - - - -->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <!--Asocierea clasei mapate-->
+    <class name="com.valerastudy.BookApp.model.Book" table="BOOKS" catalog="valerastudy">
+        <id type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="bookName" type="Java.lang.String">
+            <column name="BOOK_NAME" length="100" not-null="false" unique="false" />
+        </property>
+        <property name="bookAuthor" type="Java.lang.String">
+            <column name="BOOK_AUTHOR" length="100" not-null="false" unique="false" />
+        </property>
+        <property name="nrOfPages" type="int">
+            <column name="NR_OF_PAGES" not-null="false" unique="false" />
+        </property>
+    </class>
+</hibernate-mapping>
