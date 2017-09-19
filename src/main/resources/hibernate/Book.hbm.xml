@@ -9,13 +9,13 @@ Varianta clasei fara field-ul ID, car cu un cimp ID in DB
 <hibernate-mapping>
     <!--Asocierea clasei mapate-->
     <class name="com.valerastudy.BookApp.model.Book" table="BOOKS" catalog="valerastudy">
-        <id type="int" column="id">
+        <id type="int" name="bookId" column="BOOK_ID">
             <generator class="native"/>
         </id>
-        <property name="bookName" type="Java.lang.String">
+        <property name="bookName" type="java.lang.String">
             <column name="BOOK_NAME" length="100" not-null="false" unique="false" />
         </property>
-        <property name="bookAuthor" type="Java.lang.String">
+        <property name="bookAuthor" type="java.lang.String">
             <column name="BOOK_AUTHOR" length="100" not-null="false" unique="false" />
         </property>
         <property name="nrOfPages" type="int">
