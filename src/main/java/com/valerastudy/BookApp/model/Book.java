@@ -1,6 +1,13 @@
 package com.valerastudy.BookApp.model;
 
-public class Book {
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
+
+@XmlRootElement(name = "book")
+public class Book implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     private int bookId;
     private String bookName;
     private String bookAuthor;
@@ -20,6 +27,7 @@ public class Book {
         return bookId;
     }
 
+    @XmlElement
     public void setBookId(int bookId) {
         this.bookId = bookId;
     }
@@ -28,6 +36,7 @@ public class Book {
         return bookName;
     }
 
+    @XmlElement
     public void setBookName(String bookName) {
         this.bookName = bookName;
     }
@@ -36,6 +45,7 @@ public class Book {
         return bookAuthor;
     }
 
+    @XmlElement
     public void setBookAuthor(String bookAuthor) {
         this.bookAuthor = bookAuthor;
     }
@@ -44,7 +54,9 @@ public class Book {
         return nrOfPages;
     }
 
+    @XmlElement
     public void setNrOfPages(int nrOfPages) {
         this.nrOfPages = nrOfPages;
     }
+
 }

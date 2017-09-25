@@ -8,13 +8,24 @@
 
     <session-factory>
 
-        <property name="connection.driver_class">org.h2.Driver</property>
-        <property name="connection.url">jdbc:h2:./src/main/resources/database/book;INIT=CREATE SCHEMA IF NOT EXISTS VALERASTUDY</property>
-        <property name="connection.username">sa</property>
-        <property name="connection.password"/>
+        <!--
+                &lt;!&ndash;H2 database&ndash;&gt;
+                <property name="connection.driver_class">org.h2.Driver</property>
+                <property name="connection.url">jdbc:h2:./src/main/resources/database/book;INIT=CREATE SCHEMA IF NOT EXISTS VALERASTUDY</property>
+                <property name="connection.username">sa</property>
+                <property name="connection.password"/>
+                <property name="dialect">org.hibernate.dialect.H2Dialect</property>
+        -->
+
+        <!--mySQL database-->
+        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/book</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">root123</property>
+        <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
+
         <property name="connection.pool_size">1</property>
         <property name="current_session_context_class">thread</property>
-        <property name="dialect">org.hibernate.dialect.H2Dialect</property>
         <property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
         <property name="show_sql">true</property>
         <property name="hbm2ddl.auto">update</property>

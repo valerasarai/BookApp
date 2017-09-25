@@ -10,32 +10,42 @@ import java.util.List;
 
 public class DbImpl {
 
-    private static Session session = DbUtil.getSession();
+    private static Session session;
 
-    public static List<Book> findAll() {
+    public List<Book> findAll() {
+        session = DbUtil.getSession();
         List<Book> books = new ArrayList<Book>();
         Query query = session.createQuery("from Book");
         books = query.list();
-        return books;
+        DbUtil.closeSession();
+        if (books.size() > 0) {return books;}
+        else return null;
     }
 
-    public static List<Book> findById(int bookId) {
+    public Book findById(int bookId) {
+        session = DbUtil.getSession();
         List<Book> books = new ArrayList<Book>();
         books = session.createCriteria(Book.class)
                 .add(Restrictions.eq("bookId", bookId))
                 .list();
-        return books;
+        DbUtil.closeSession();
+        if (books.size() > 0) {return books.get(0);}
+        else return null;
     }
 
-    public static List<Book> findByName(String bookName) {
+    public Book findByName(String bookName) {
+        session = DbUtil.getSession();
         List<Book> books = new ArrayList<Book>();
         books = session.createCriteria(Book.class)
                 .add(Restrictions.eq("bookName", bookName))
                 .list();
-        return books;
+        DbUtil.closeSession();
+        if (books.size() > 0) {return books.get(0);}
+        else return null;
     }
 
-    public static boolean deleteById(int bookId) {
+    public boolean deleteById(int bookId) {
+        session = DbUtil.getSession();
         session.beginTransaction();
         Query query = session.createQuery("delete from Book where bookId = :id")
                 .setParameter("id", bookId);
@@ -45,6 +55,7 @@ public class DbImpl {
         query = session.createQuery("from Book where bookId = :id")
                 .setParameter("id", bookId);
         List<Book> books = query.list();
+        DbUtil.closeSession();
 
         if (books == null || books.size() == 0){
             return true;
@@ -54,13 +65,15 @@ public class DbImpl {
         }
     }
 
-    public static boolean updateBook(Book book) {
+    public boolean updateBook(Book book) {
         if (checkBook(book)) {
+            session = DbUtil.getSession();
             session.beginTransaction();
             Book entityBook = session.get(Book.class, book.getBookId());
             copyBookObject(entityBook, book);
             session.update(entityBook);
             session.getTransaction().commit();
+            DbUtil.closeSession();
             return true;
         } else {
             return false;
@@ -75,20 +88,32 @@ public class DbImpl {
      * 1 - object already exist in DB
      * -1 - error on saving object
      */
-    public static int saveBook(Book book) {
+    public int saveBook(Book book) {
         if (!checkBook(book)) {
+            session = DbUtil.getSession();
             session.beginTransaction();
             session.save(book);
             session.getTransaction().commit();
-            if (!checkBook(book)) return -1;
+            DbUtil.closeSession();
+            if (!checkBook(book))
+                return -1;
             else return 0;
         } else return 1;
     }
 
-    private static boolean checkBook(Book book) {
-        List<Book> books = new ArrayList<Book>();
-        books = findById(book.getBookId());
-        if (books == null || books.size() == 0){
+    public int getMaxId(){
+        session = DbUtil.getSession();
+        List<Integer> books = new ArrayList<Integer>();
+        Query query = session.createQuery("select max(bookId) from Book");
+        books = query.list();
+        DbUtil.closeSession();
+        return books.get(0);
+    }
+
+    private boolean checkBook(Book book) {
+        Book book2 = new Book();
+        book2 = findById(book.getBookId());
+        if (book2 == null){
             return false;
         }
         else {
@@ -96,7 +121,7 @@ public class DbImpl {
         }
     }
 
-    private static void copyBookObject(Book entityBook, Book book){
+    private void copyBookObject(Book entityBook, Book book){
         entityBook.setBookId(book.getBookId());
         entityBook.setBookName(book.getBookName());
         entityBook.setBookAuthor(book.getBookAuthor());
